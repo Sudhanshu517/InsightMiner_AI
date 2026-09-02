@@ -26,10 +26,6 @@ export default function Dashboard() {
 
   const isDemo = !session;
 
-  useEffect(() => {
-    fetchAllData();
-  }, [fetchAllData]);
-
   const fetchSentimentData = useCallback(async () => {
     try {
       const response = await fetch(`/api/sentiment-stats?timeRange=${timeRange}`);
@@ -126,6 +122,10 @@ export default function Dashboard() {
     ]);
     setDataLoading(false);
   }, [fetchSentimentData, fetchTrendData, fetchTopicData, fetchRecentFeedback]);
+
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
 
   const refreshData = async () => {
     setRefreshing(true);
