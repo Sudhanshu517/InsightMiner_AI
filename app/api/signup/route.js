@@ -17,6 +17,10 @@ export async function POST(req) {
 
     return Response.json({ message: "User created successfully", userId: newUser._id });
   } catch (error) {
-    return Response.json({ error: "Server error" }, { status: 500 });
+    console.error("Signup error:", error);
+    return Response.json(
+      { error: process.env.NODE_ENV === "development" ? error.message : "Server error" },
+      { status: 500 }
+    );
   }
 }
