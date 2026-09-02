@@ -1,108 +1,109 @@
-# AI Feedback Analyzer
+﻿# InsightMiner AI
 
-A full-stack Next.js 15 application that analyzes customer feedback using a trained Python ML model (scikit-learn) + Gemini AI for enhanced insights. Provides sentiment analysis, trend detection, topic extraction, and automated customer response generation.
+A full-stack Next.js 15 application that turns raw customer feedback into structured, actionable intelligence. InsightMiner AI combines a trained Python ML model with an optional LLM enrichment layer (Groq / Llama 3.3) to deliver sentiment classification, trend detection, topic extraction, and automated customer response generation — all surfaced through an analytics dashboard.
+
+---
+
+## Live Demo
+
+> Deploy your own instance in under 10 minutes — see [Setup](#setup) below.
+
+---
+
+## What It Does
+
+| Capability | Detail |
+|---|---|
+| **Sentiment Analysis** | Classifies feedback as Positive / Neutral / Negative with a confidence score |
+| **Trend Detection** | Time-series chart showing sentiment volume over the last week / month / quarter / year |
+| **Topic Extraction** | Identifies the most frequently mentioned keywords and topics across all feedback |
+| **Response Generation** | Generates a professional, empathetic reply to each piece of feedback |
+| **Key Insights** | Extracts 2–4 business-actionable takeaways per submission |
+| **Analytics Dashboard** | Bar, pie, and area charts with time-range filtering and one-click refresh |
+| **Authentication** | Email/password signup and login with JWT sessions |
+| **Demo Mode** | Fully functional with pre-seeded data — no AI keys required to evaluate |
 
 ---
 
 ## Tech Stack
 
 | Layer | Technology |
-|-------|------------|
-| **Frontend** | Next.js 15 (App Router), React 19, Tailwind CSS v3, Recharts |
+|---|---|
+| **Framework** | Next.js 15 (App Router) |
+| **Frontend** | React 19, Tailwind CSS v4, Recharts |
 | **Backend** | Next.js API Routes, NextAuth.js v4 |
 | **Database** | MongoDB (Mongoose) |
-| **ML Model** | Python (scikit-learn): TF-IDF + Logistic Regression/Naive Bayes/SVM with SMOTE |
-| **External AI** | Google Gemini 2.0 Flash API |
-| **State** | Recoil (global), React Context (session/notifications) |
-| **Auth** | Credentials (bcryptjs) |
+| **ML Model** | Python · scikit-learn · TF-IDF + Logistic Regression / Naive Bayes / SVM · SMOTE |
+| **AI Enrichment** | Groq API · Llama 3.3-70b-versatile (optional) |
+| **Auth** | Credentials provider · bcryptjs · JWT |
+| **Icons** | Lucide React |
 
 ---
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Next.js 15 App                           │
-├─────────────────────────────────────────────────────────────────┤
-│  Frontend Pages                                                 │
-│  ├── / (Landing)                                                │
-│  ├── /feedback (Submit & Analyze)                               │
-│  ├── /dashboard (Analytics: charts, trends, topics)             │
-│  ├── /login, /signup, /profile (Auth)                          │
-│                                                                 │
-│  Components                                                     │
-│  ├── Navbar, Footer, FeedbackWidget, NotificationSystem        │
-│  └── SessionWrapper (NextAuth context)                         │
-├─────────────────────────────────────────────────────────────────┤
-│  API Routes                                                     │
-│  ├── POST /api/analyze-feedback  → Python ML + Gemini          │
-│  ├── GET  /api/sentiment-stats   → Aggregated sentiment data   │
-│  ├── GET  /api/trends            → Time-series sentiment       │
-│  ├── GET  /api/topics            → Extracted keywords/topics   │
-│  ├── GET  /api/recent-feedback   → Latest submissions          │
-│  └── /api/auth/[...nextauth]     → NextAuth credentials        │
-├─────────────────────────────────────────────────────────────────┤
-│  Python ML Service (spawned via child_process)                 │
-│  ├── app/model/prediction.py   → Loads .pkl model + vectorizer │
-│  ├── app/model/main.py         → Training pipeline             │
-│  └── Models: best_sentiment_model.pkl, tfidf_vectorizer.pkl   │
-├─────────────────────────────────────────────────────────────────┤
-│  Database (MongoDB)                                             │
-│  ├── User: email, password (bcrypt)                            │
-│  └── Response: feedback, sentiment, confidence, topics, etc.   │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                      Next.js 15 App                          │
+├──────────────────────────────────────────────────────────────┤
+│  Pages                                                       │
+│  ├── /             Landing page                              │
+│  ├── /feedback     Submit & analyze feedback                 │
+│  ├── /dashboard    Analytics: charts, trends, topics         │
+│  ├── /login        Sign in                                   │
+│  ├── /signup       Create account                            │
+│  └── /profile      User profile                              │
+├──────────────────────────────────────────────────────────────┤
+│  API Routes                                                  │
+│  ├── POST /api/analyze-feedback   ML pipeline + LLM          │
+│  ├── GET  /api/sentiment-stats    Aggregated sentiment        │
+│  ├── GET  /api/trends             Time-series sentiment       │
+│  ├── GET  /api/topics             Top keywords / topics       │
+│  ├── GET  /api/recent-feedback    Latest submissions          │
+│  ├── POST /api/signup             User registration           │
+│  └── /api/auth/[...nextauth]      NextAuth credentials        │
+├──────────────────────────────────────────────────────────────┤
+│  ML Layer (Node → Python child_process)                      │
+│  ├── app/model/prediction.py      Loads .pkl model           │
+│  ├── app/model/main.py            Training pipeline           │
+│  └── *.pkl                        Pre-trained model files    │
+│                                                              │
+│  JS Fallback (no Python required)                            │
+│  └── app/utils/sentimentAnalyzer.js   Keyword-based scoring  │
+├──────────────────────────────────────────────────────────────┤
+│  Database · MongoDB                                          │
+│  ├── User     email, password (bcrypt)                       │
+│  └── Response feedback, sentiment, confidence, topics, …     │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Key Features
-
-1. **Sentiment Analysis** — Classifies feedback as Positive/Neutral/Negative with confidence scores (via trained TF-IDF + Logistic Regression model)
-2. **Automated Customer Responses** — Gemini AI generates empathetic, personalized replies
-3. **Key Insights Extraction** — Business-actionable takeaways from feedback
-4. **Keyword/Topic Detection** — TF-IDF + Gemini identifies main topics
-5. **Analytics Dashboard** — Recharts visualizations: bar/pie/area charts for sentiment distribution, trends over time, top topics
-6. **Authentication** — Secure email/password with bcrypt + JWT sessions
-7. **Offline Fallback** — Works without Gemini API (uses local ML model only)
-
----
-
-## ML Model Details (`app/model/main.py`)
-
-- **Dataset**: Flipkart product reviews (11M+ rows CSV)
-- **Preprocessing**: Contraction expansion, negation handling (NOT_ prefix), custom stopwords preserving sentiment modifiers
-- **Features**: TF-IDF (unigrams + bigrams, min_df=5, max_df=0.8, sublinear_tf)
-- **Class Balance**: SMOTE oversampling
-- **Models Compared**: Logistic Regression, Naive Bayes, LinearSVC (GridSearchCV)
-- **Best Model Saved**: `best_sentiment_model.pkl` + `tfidf_vectorizer.pkl`
-
----
-
-## Data Flow: Analyze Feedback
+## Feedback Analysis Flow
 
 ```
-User submits feedback (POST /api/analyze-feedback)
+POST /api/analyze-feedback
         │
         ▼
-┌───────────────────────┐
-│ 1. Python ML Model    │  ← spawn child_process → prediction.py
-│    (sentiment, rating,│     Returns: sentiment, confidence, rating
-│     keywords)         │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ 2. Gemini API (opt)   │  ← Generates: customerResponse, keyInsights, keywords
-│    (enrichment)       │     Falls back to local if unavailable
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ 3. Save to MongoDB    │  ← Response collection
-└───────────┬───────────┘
-            │
-            ▼
-       Return JSON to UI
+┌─────────────────────┐
+│  1. ML Sentiment    │  Python child_process → prediction.py
+│     (or JS fallback)│  Returns: sentiment · confidence · rating · keywords
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  2. Groq LLM (opt.) │  llama-3.3-70b-versatile
+│     Enrichment      │  Returns: customerResponse · keyInsights · keywords
+│     + fallback      │  Falls back to pre-written responses if unavailable
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  3. Save to MongoDB │  Response collection
+└──────────┬──────────┘
+           │
+           ▼
+      Return JSON → UI
 ```
 
 ---
@@ -110,56 +111,104 @@ User submits feedback (POST /api/analyze-feedback)
 ## Project Structure
 
 ```
-AIFEEDBACK/
+InsightMiner_AI/
 ├── app/
-│   ├── api/                    # Next.js API routes
-│   │   ├── analyze-feedback/   # Core ML + Gemini pipeline
-│   │   ├── auth/[...nextauth]/ # NextAuth credentials
-│   │   ├── sentiment-stats/    # Dashboard aggregations
-│   │   ├── trends/             # Time-series data
-│   │   ├── topics/             # Keyword extraction
-│   │   └── recent-feedback/    # Latest entries
-│   ├── components/             # Shared UI (Navbar, Footer, etc.)
-│   ├── dashboard/              # Analytics page (Recharts)
-│   ├── feedback/               # Submit & analyze page
-│   ├── model/                  # Python ML (main.py, prediction.py, .pkl files)
-│   ├── models/                 # Mongoose schemas (User, Response)
-│   ├── utils/                  # db.js, sentimentAnalyzer.js
-│   ├── login/signup/profile/   # Auth pages
-│   ├── globals.css             # Tailwind v4 + custom CSS vars
-│   ├── layout.js               # Root layout + providers
-│   └── page.js                 # Landing page
+│   ├── api/
+│   │   ├── analyze-feedback/     Core ML + LLM pipeline
+│   │   ├── auth/[...nextauth]/   Authentication
+│   │   ├── sentiment-stats/      Dashboard aggregations
+│   │   ├── trends/               Time-series data
+│   │   ├── topics/               Keyword extraction
+│   │   ├── recent-feedback/      Latest entries
+│   │   └── signup/               User registration
+│   ├── components/
+│   │   ├── Navbar.js
+│   │   ├── Footer.js
+│   │   ├── FeedbackWidget.js
+│   │   ├── NotificationSystem.js
+│   │   ├── SessionWrapper.js
+│   │   └── LoadingSpinner.js
+│   ├── dashboard/                Analytics page
+│   ├── feedback/                 Submit & analyze page
+│   ├── login/                    Sign in page
+│   ├── signup/                   Registration page
+│   ├── profile/                  User profile page
+│   ├── model/                    Python ML scripts + .pkl files
+│   ├── models/                   Mongoose schemas (User, Response)
+│   ├── utils/
+│   │   ├── db.js                 MongoDB connection (cached)
+│   │   ├── sentimentAnalyzer.js  Python spawn + JS fallback
+│   │   └── seedDemoData.js       Auto-seeds demo data on startup
+│   ├── layout.js                 Root layout + providers
+│   ├── page.js                   Landing page
+│   └── globals.css               Tailwind + CSS variables
+├── instrumentation.js            Next.js startup hook (runs seeder)
+├── .env.example                  Environment variable template
+├── next.config.mjs
 ├── package.json
 └── README.md
 ```
 
 ---
 
-## Environment Variables Required
+## Setup
 
-```env
-MONGODB_URI=mongodb://...
-NEXTAUTH_SECRET=your-secret
-GEMINI_API_KEY=your-gemini-key  # Optional (fallback works without)
+### Prerequisites
+
+- Node.js 18+
+- MongoDB Atlas account (free M0 tier) — [cloud.mongodb.com](https://cloud.mongodb.com)
+- Python 3.8+ with `scikit-learn`, `numpy`, `pandas`, `joblib` *(optional — JS fallback works without it)*
+- Groq API key *(optional — demo mode works without it)*
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/your-username/InsightMiner_AI.git
+cd InsightMiner_AI
+npm install
 ```
 
+### 2. Configure environment variables
+
+```bash
+cp .env.example .env.local
+```
+
+Open `.env.local` and fill in:
+
+```env
+MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/insightminer
+NEXTAUTH_SECRET=<generate with: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))">
+GROQ_API_KEY=          # Optional — get free at console.groq.com
+```
+
+### 3. Run locally
+
+```bash
+npm run dev
+```
+
+On first start, the server automatically seeds 30 demo feedback entries into your database so the dashboard is immediately populated. No manual data entry needed.
+
+Open [http://localhost:3000](http://localhost:3000), sign up, and explore.
+
 ---
 
-## Strengths
+## Environment Variables
 
-- Hybrid ML + LLM approach (local model for speed/cost, Gemini for richness)
-- Full authentication + user-specific data isolation
-- Comprehensive analytics dashboard with multiple chart types
-- Graceful offline degradation
-- Clean separation of concerns (Python ML, Next.js API, React UI)
+| Variable | Required | Purpose | How to obtain |
+|---|---|---|---|
+| `MONGODB_URI` | Yes | Database connection | [MongoDB Atlas](https://cloud.mongodb.com) — free M0 cluster |
+| `NEXTAUTH_SECRET` | Yes | JWT session signing | `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"` |
+| `NEXTAUTH_URL` | Production only | Canonical base URL for NextAuth callbacks | Set to your deployed URL (e.g. `https://your-app.vercel.app`). Not needed on Vercel — auto-detected. |
+| `GROQ_API_KEY` | No | LLM enrichment (Llama 3.3-70b) | [console.groq.com](https://console.groq.com) — free tier |
 
 ---
 
-## Potential Improvements
+## Contributing
 
-- Add rate limiting on `/api/analyze-feedback`
-- Implement feedback batching/bulk upload
-- Add export (CSV/PDF) for dashboard
-- WebSocket for real-time updates
-- Unit/integration tests
-- Dockerize Python ML service for production scaling
+InsightMiner AI is open to contributions of all kinds: bug fixes, new features, UX improvements, or documentation updates.
+
+If you find an issue or have an idea, open an issue to start a conversation. Pull requests are welcome. Please keep changes focused and describe what problem they solve.
+
+Built with curiosity. Improved with community.

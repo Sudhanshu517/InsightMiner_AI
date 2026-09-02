@@ -13,7 +13,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 md:pr-12">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">AI-Powered</span> Customer Feedback Analyzer
+                <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">InsightMiner AI</span> — Customer Feedback Intelligence
               </h1>
               <p className="mt-6 text-lg md:text-xl text-gray-300">
                 Transform customer feedback into actionable insights. Our AI analyzes sentiment, detects trends, and helps you make data-driven decisions to improve customer experience.
@@ -74,7 +74,7 @@ export default function Home() {
       <section className="py-20 bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white">Why Choose Our AI Tool?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white">Why Choose InsightMiner AI?</h2>
             <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
               Our platform uses advanced machine learning algorithms to provide you with the most accurate and actionable insights.
             </p>
@@ -173,7 +173,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-white">Start Improving Customer Experience Today</h2>
           <p className="mt-4 text-lg text-gray-300">
-            Join thousands of businesses that use our AI-powered platform to analyze feedback, detect trends, and gain valuable insights.
+            Join thousands of businesses using InsightMiner AI to analyze feedback, detect trends, and turn raw reviews into actionable decisions.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
             <Link href="/signup">

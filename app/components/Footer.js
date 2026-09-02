@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <MessageSquare className="h-6 w-6 text-blue-500" />
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">AI Feedback</span>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">InsightMiner AI</span>
             </div>
             <p className="text-sm">
               Gain real-time insights from customer feedback to enhance your brand reputation.
@@ -70,7 +70,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6 text-center text-sm">
-          <p>© {new Date().getFullYear()} AI Feedback. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} InsightMiner AI. All Rights Reserved.</p>
           <p className="mt-2">Made with ❤️ for better customer insights</p>
         </div>
       </div>

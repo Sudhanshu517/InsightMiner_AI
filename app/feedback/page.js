@@ -87,7 +87,7 @@ export default function Feedback() {
     <div className="max-w-7xl mx-auto p-6 min-h-screen">
       <div className="text-center mb-10 text-white">
         <h1 className="text-3xl md:text-4xl font-bold dark:text-white mb-4">
-          AI Feedback Analyzer
+          InsightMiner AI
         </h1>
         <p className="text-lg  dark:text-gray-300 max-w-3xl mx-auto">
           Enter customer feedback below and our AI will analyze the sentiment,

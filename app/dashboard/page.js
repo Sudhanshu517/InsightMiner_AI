@@ -9,12 +9,12 @@ import {
 } from "recharts";
 import { 
   BarChart2, TrendingUp, PieChart as PieChartIcon, MessageSquare, 
-  AlertTriangle, ThumbsUp, ThumbsDown, Filter, Download, RefreshCw, Loader2
+  AlertTriangle, ThumbsUp, ThumbsDown, Filter, Download, RefreshCw, Loader2,
+  FlaskConical
 } from "lucide-react";
 
 export default function Dashboard() {
   const { session, loading } = useSessionContext();
-  const router = useRouter();
 
   const [sentimentData, setSentimentData] = useState([]);
   const [trendData, setTrendData] = useState([]);
@@ -24,11 +24,11 @@ export default function Dashboard() {
   const [timeRange, setTimeRange] = useState("month");
   const [refreshing, setRefreshing] = useState(false);
 
+  const isDemo = !session;
+
   useEffect(() => {
-    if (!loading && !session) {
-      router.push("/login");
-    }
-  }, [session, loading, router]);
+    fetchAllData();
+  }, [fetchAllData]);
 
   const fetchSentimentData = useCallback(async () => {
     try {
@@ -133,12 +133,6 @@ export default function Dashboard() {
     setRefreshing(false);
   };
 
-  useEffect(() => {
-    if (session) {
-      fetchAllData();
-    }
-  }, [session, fetchAllData]);
-
   const exportData = () => {
     // In a real app, this would generate a CSV or Excel file with the dashboard data
     alert("Data export functionality would be implemented here");
@@ -164,7 +158,7 @@ export default function Dashboard() {
     }
   };
 
-  if (loading || dataLoading) {
+  if (dataLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -177,6 +171,27 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
+
+      {/* Demo mode banner — shown to visitors who are not logged in */}
+      {isDemo && (
+        <div className="flex items-center gap-3 mb-6 px-5 py-4 rounded-xl bg-blue-950 border border-blue-700 text-blue-200">
+          <FlaskConical className="h-5 w-5 shrink-0 text-blue-400" />
+          <div>
+            <span className="font-semibold text-blue-300">Demo Mode</span>
+            <span className="ml-2 text-sm">
+              You&apos;re viewing pre-seeded sample data.{" "}
+              <a href="/signup" className="underline hover:text-white transition-colors">
+                Sign up
+              </a>{" "}
+              or{" "}
+              <a href="/login" className="underline hover:text-white transition-colors">
+                log in
+              </a>{" "}
+              to analyse your own feedback.
+            </span>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col md:flex-row justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Feedback Analytics Dashboard</h1>
         

@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "AI Feedback Analyzer",
+  title: "InsightMiner AI",
   description: "Gain real-time insights from customer feedback to enhance your brand reputation",
-  keywords: "AI, feedback, sentiment analysis, customer insights, analytics",
+  keywords: "AI, feedback, sentiment analysis, customer insights, analytics, InsightMiner",
 };
 
 export default function RootLayout({ children }) {
