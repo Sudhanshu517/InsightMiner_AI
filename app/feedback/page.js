@@ -262,10 +262,10 @@ export default function Feedback() {
                   </div>
                 )}
 
-                {/* Display if using a fallback response (without Gemini) */}
+                {/* Display when running in local/demo mode without the AI enrichment layer */}
                 {result.offline && (
                   <div className="p-3 bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-500 rounded text-yellow-700 dark:text-yellow-300 text-sm">
-                    Note: Using local analysis (Gemini API unavailable)
+                    ⚡ Demo Mode — sentiment scored by local model. AI-enriched responses, key insights, and keyword extraction are available when the full AI layer is enabled.
                   </div>
                 )}
               </div>
